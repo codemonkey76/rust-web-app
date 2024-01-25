@@ -1,4 +1,4 @@
-use crate::web::mw_auth::CtxW;
+use crate::web::middleware::auth::CtxW;
 use axum::extract::State;
 use axum::response::{IntoResponse, Response};
 use axum::routing::post;

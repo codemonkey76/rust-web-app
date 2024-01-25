@@ -1,7 +1,7 @@
 use crate::log::log_request;
-use crate::web::mw_auth::CtxW;
-use crate::web::mw_req_stamp::ReqStamp;
-use crate::web::routes_rpc::RpcInfo;
+use crate::web::middleware::auth::CtxW;
+use crate::web::middleware::req_stamp::ReqStamp;
+use crate::web::routes::rpc::RpcInfo;
 use crate::web::{self};
 use axum::http::{Method, Uri};
 use axum::response::{IntoResponse, Response};
@@ -11,7 +11,7 @@ use std::sync::Arc;
 use tracing::debug;
 use uuid::Uuid;
 
-pub async fn mw_reponse_map(
+pub async fn response_map(
 	ctx: Option<CtxW>,
 	uri: Uri,
 	req_method: Method,

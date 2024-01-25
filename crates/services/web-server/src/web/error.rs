@@ -26,7 +26,7 @@ pub enum Error {
 
 	// -- CtxExtError
 	#[from]
-	CtxExt(web::mw_auth::CtxExtError),
+	CtxExt(web::middleware::auth::CtxExtError),
 
 	// -- Extractors
 	ReqStampNotInReqExt,
