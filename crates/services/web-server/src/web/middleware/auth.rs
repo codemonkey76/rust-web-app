@@ -15,7 +15,7 @@ use serde::Serialize;
 use tower_cookies::{Cookie, Cookies};
 use tracing::debug;
 
-pub async fn mw_ctx_require(
+pub async fn ctx_require(
 	ctx: Result<CtxW>,
 	req: Request<Body>,
 	next: Next,
@@ -32,7 +32,7 @@ pub async fn mw_ctx_require(
 //            This way it won't prevent downstream middleware to be executed, and will still capture the error
 //            for the appropriate middleware (.e.g., mw_ctx_require which forces successful auth) or handler
 //            to get the appropriate information.
-pub async fn mw_ctx_resolver(
+pub async fn ctx_resolver(
 	State(mm): State<ModelManager>,
 	cookies: Cookies,
 	mut req: Request<Body>,

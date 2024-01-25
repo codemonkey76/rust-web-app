@@ -17,7 +17,7 @@ pub struct ReqStamp {
 	pub time_in: OffsetDateTime,
 }
 
-pub async fn mw_req_stamp_resolver(
+pub async fn req_stamp_resolver(
 	mut req: Request<Body>,
 	next: Next,
 ) -> Result<Response> {

@@ -8,10 +8,9 @@ mod web;
 pub use self::error::{Error, Result};
 use config::web_config;
 
-use crate::web::mw_auth::{mw_ctx_require, mw_ctx_resolver};
-use crate::web::mw_req_stamp::mw_req_stamp_resolver;
-use crate::web::mw_res_map::mw_reponse_map;
-use crate::web::{routes_login, routes_static};
+use crate::web::middleware::res_map::response_map;
+use crate::web::middleware::auth::{ctx_require, ctx_resolver};
+use crate::web::middleware::req_stamp::req_stamp_resolver;
 use axum::{middleware, Router};
 use lib_core::_dev_utils;
 use lib_core::model::ModelManager;
@@ -36,17 +35,17 @@ async fn main() -> Result<()> {
 	let mm = ModelManager::new().await?;
 
 	// -- Define Routes
-	let routes_rpc = web::routes_rpc::routes(mm.clone())
-		.route_layer(middleware::from_fn(mw_ctx_require));
+	let routes_rpc = web::routes::rpc::routes(mm.clone())
+		.route_layer(middleware::from_fn(ctx_require));
 
 	let routes_all = Router::new()
-		.merge(routes_login::routes(mm.clone()))
+		.merge(web::routes::login::routes(mm.clone()))
 		.nest("/api", routes_rpc)
-		.layer(middleware::map_response(mw_reponse_map))
-		.layer(middleware::from_fn_with_state(mm.clone(), mw_ctx_resolver))
+		.layer(middleware::map_response(response_map))
+		.layer(middleware::from_fn_with_state(mm.clone(), ctx_resolver))
 		.layer(CookieManagerLayer::new())
-		.layer(middleware::from_fn(mw_req_stamp_resolver))
-		.fallback_service(routes_static::serve_dir());
+		.layer(middleware::from_fn(req_stamp_resolver))
+		.fallback_service(web::routes::static_routes::serve_dir());
 
 	// region:    --- Start Server
 	// Note: For this block, ok to unwrap.
